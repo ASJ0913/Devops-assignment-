@@ -1,0 +1,37 @@
+name: Deploy to S3 on Push
+
+on:
+  push:
+    branches:
+      - main  # or your deployment branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Sync files to S3
+      run: |
+        aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }} --delete
+
+    - name: Update CloudFormation Stack
+      run: |
+        aws cloudformation update-stack \
+          --stack-name ${{ secrets.CLOUDFORMATION_STACK_NAME }} \
+          --template-url https://s3.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.S3_BUCKET_NAME }}/cloudformation.yaml \
+          --capabilities CAPABILITY_IAM
+
+    - name: Wait for Stack Update to Complete
+      run: |
+        aws cloudformation wait stack-update-complete \
+          --stack-name ${{ secrets.CLOUDFORMATION_STACK_NAME }}
