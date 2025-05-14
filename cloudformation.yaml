@@ -10,7 +10,7 @@ Parameters:
       - t3.micro
       - t3.small
     ConstraintDescription: must be a valid EC2 instance type.
-    
+
   MyIP:
     Description: Your IP address in CIDR format (e.g. 203.0.113.1/32).
     Type: String
@@ -53,12 +53,17 @@ Resources:
       UserData: !Base64 |
         #!/bin/bash
         yum update -y
-        yum install -y httpd aws-cli
+        yum install -y httpd aws-cli cronie
+        systemctl start crond
+        systemctl enable crond
         systemctl start httpd
         systemctl enable httpd
 
-        # Download the JavaScript logic from S3
+        # Initial download of the JavaScript logic from S3
         aws s3 cp s3://iaccode-ashton/nameGenerator.js /var/www/html/nameGenerator.js --region eu-north-1
+
+        # Set up a cron job to re-fetch JS file on every reboot
+        echo "@reboot root aws s3 cp s3://iaccode-ashton/nameGenerator.js /var/www/html/nameGenerator.js --region eu-north-1" >> /etc/crontab
 
         # Create index.html referencing the external JS
         cat <<EOF > /var/www/html/index.html
