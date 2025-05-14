@@ -46,7 +46,7 @@ Resources:
     Type: AWS::EC2::Instance
     DeletionPolicy: Delete
     Metadata:
-      ForceUpdate: "2025-05-14T17:45:18"
+      ForceUpdate: "2025-05-14T17:53:04"
     Properties:
       ImageId: !Ref LatestAmiId
       InstanceType: !Ref InstanceType
@@ -120,3 +120,4 @@ Outputs:
       - - http://
         - !GetAtt WebServerV2.PublicIp  # <- updated to match new logical ID
     Description: Public URL to access your web application
+#Comment#
