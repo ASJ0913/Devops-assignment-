@@ -53,12 +53,12 @@ Resources:
       UserData: !Base64 |
         #!/bin/bash
         yum update -y
-        yum install -y httpd
+        yum install -y httpd aws-cli
         systemctl start httpd
         systemctl enable httpd
 
         # Download the JavaScript logic from S3
-        aws s3 cp s3://iaccode-ashton/nameGenerator.js /var/www/html/nameGenerator.js
+        aws s3 cp s3://iaccode-ashton/nameGenerator.js /var/www/html/nameGenerator.js --region eu-north-1
 
         # Create index.html referencing the external JS
         cat <<EOF > /var/www/html/index.html
