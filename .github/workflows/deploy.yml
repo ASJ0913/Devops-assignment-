@@ -3,7 +3,7 @@ name: Deploy to S3 on Push
 on:
   push:
     branches:
-      - main  # or your deployment branch
+      - main  # or your deployment branch change
 
 jobs:
   deploy:
@@ -26,10 +26,21 @@ jobs:
 
     - name: Update CloudFormation Stack
       run: |
-        aws cloudformation update-stack \
+        set -e
+        OUTPUT=$(aws cloudformation update-stack \
           --stack-name ${{ secrets.CLOUDFORMATION_STACK_NAME }} \
           --template-url https://s3.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.S3_BUCKET_NAME }}/cloudformation.yaml \
-          --capabilities CAPABILITY_IAM
+          --capabilities CAPABILITY_IAM 2>&1) || true
+
+        echo "$OUTPUT"
+
+        if [[ "$OUTPUT" == *"No updates are to be performed"* ]]; then
+          echo "✅ No changes detected. Stack is up to date."
+          exit 0
+        elif [[ "$OUTPUT" == *"ValidationError"* ]]; then
+          echo "❌ Template validation failed."
+          exit 1
+        fi
 
     - name: Wait for Stack Update to Complete
       run: |
