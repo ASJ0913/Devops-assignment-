@@ -45,7 +45,7 @@ Resources:
   WebServer:
     Type: AWS::EC2::Instance
     Metadata:
-      ForceUpdate: "2025-05-14T17:06:57"
+      ForceUpdate: "2025-05-14T17:10:30"
     DeletionPolicy: Delete
     Properties:
       ImageId: !Ref LatestAmiId
@@ -71,7 +71,7 @@ Resources:
         cat <<EOF > /var/www/html/index.html
         <html>
           <head>
-            <title>Random Name Generator</title>
+            <title>Random Name Generator-test</title>
             <style>
               body {
                 font-family: Arial, sans-serif;
