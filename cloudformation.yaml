@@ -44,6 +44,8 @@ Resources:
 
   WebServer:
     Type: AWS::EC2::Instance
+    Metadata:
+      ForceUpdate: "2024-05-14T21:00"
     DeletionPolicy: Delete
     Properties:
       ImageId: !Ref LatestAmiId
