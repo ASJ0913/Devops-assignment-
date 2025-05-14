@@ -45,7 +45,7 @@ Resources:
   WebServer:
     Type: AWS::EC2::Instance
     Metadata:
-      ForceUpdate: "2025-05-14T16:52:32"
+      ForceUpdate: "2025-05-14T17:06:57"
     DeletionPolicy: Delete
     Properties:
       ImageId: !Ref LatestAmiId
@@ -120,4 +120,4 @@ Outputs:
       - - http://
         - !GetAtt WebServer.PublicIp
     Description: Public URL to access your web application
-#Change 2
+#Change 3
