@@ -46,7 +46,7 @@ Resources:
     Type: AWS::EC2::Instance
     DeletionPolicy: Delete
     Metadata:
-      ForceUpdate: "2025-05-14T17:27:31"
+      ForceUpdate: "2025-05-14T17:30:11"
     Properties:
       ImageId: !Ref LatestAmiId
       InstanceType: !Ref InstanceType
@@ -106,7 +106,7 @@ Resources:
           </head>
           <body>
             <div>
-              <h1 id="randomName">Press the button to generate a name-test</h1>
+              <h1 id="randomName">Press the button to generate a name-test2</h1>
               <button>Generate Name</button>
             </div>
           </body>
